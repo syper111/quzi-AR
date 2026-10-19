@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>امتحان اللغة العربية - النمط الوزاري - الصف العاشر</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&family=Amiri:wght@700&display=swap" rel="stylesheet">
+    <title>امتحان وحدة (ثقافة الاعتذار وأسلوب الشرط) - الجذور متصلة والضبط دقيق</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
          :root {
             --bg-color: #0a0a12;
@@ -80,7 +80,7 @@
         
         h1 {
             color: var(--neon-cyan);
-            font-size: 2.2rem;
+            font-size: 2.1rem;
             margin-bottom: 15px;
             text-shadow: 0 0 10px var(--neon-cyan);
         }
@@ -168,28 +168,6 @@
             font-size: 0.9rem;
         }
         
-        .section-title {
-            color: var(--neon-cyan);
-            border-right: 4px solid var(--neon-cyan);
-            padding-right: 10px;
-            margin: 30px 0 15px 0;
-            font-size: 1.3rem;
-            text-shadow: 0 0 5px var(--neon-cyan);
-        }
-        
-        .passage-box {
-            background: #11111d;
-            border: 1px solid var(--neon-cyan);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 25px;
-            line-height: 2.2;
-            font-family: 'Amiri', serif;
-            font-size: 1.3rem;
-            color: #f0f0f0;
-            box-shadow: 0 0 15px rgba(0, 243, 255, 0.15);
-        }
-        
         .q-box {
             background: #18182a;
             border: 1px solid #2a2a48;
@@ -229,7 +207,6 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
-            margin-bottom: 12px;
         }
         
         .option-item {
@@ -254,41 +231,6 @@
             accent-color: var(--neon-pink);
             width: 18px;
             height: 18px;
-        }
-        
-        .fields-container {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-        }
-        
-        .sub-field-group {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-        
-        .sub-field-label {
-            color: var(--neon-cyan);
-            font-size: 0.95rem;
-            font-weight: bold;
-        }
-        
-        .text-answer-input {
-            width: 100%;
-            padding: 10px 15px;
-            background: #11111d;
-            border: 1px dashed #555577;
-            border-radius: 8px;
-            color: #fff;
-            font-size: 0.98rem;
-            outline: none;
-            transition: 0.3s;
-        }
-        
-        .text-answer-input:focus {
-            border-color: var(--neon-cyan);
-            box-shadow: 0 0 8px var(--neon-cyan);
         }
         
         #final-screen {
@@ -351,17 +293,6 @@
         
         td {
             background: #18182a;
-        }
-        
-        .answers-detail-box {
-            text-align: right;
-            background: #11111d;
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            color: var(--text-dim);
-            max-height: 120px;
-            overflow-y: auto;
         }
         
         .dashboard-actions {
@@ -431,12 +362,12 @@
         const database = firebase.database();
 
         function saveToFirebase(record) {
-            database.ref('arabic_final_exam_results').push(record)
+            database.ref('arabic_unit_mcq_results').push(record)
                 .catch(err => console.error("خطأ أثناء الحفظ:", err));
         }
 
         function getResultsFromFirebase(callback) {
-            database.ref('arabic_final_exam_results').once('value')
+            database.ref('arabic_unit_mcq_results').once('value')
                 .then(snapshot => {
                     const data = snapshot.val();
                     let list = [];
@@ -455,7 +386,7 @@
         }
 
         function clearFirebaseData(callback) {
-            database.ref('arabic_final_exam_results').remove()
+            database.ref('arabic_unit_mcq_results').remove()
                 .then(() => callback(true))
                 .catch(err => callback(false));
         }
@@ -468,8 +399,8 @@
         <button id="teacher-main-btn" class="teacher-btn" onclick="openTeacherDashboard()">لوحة المعلم 🔒</button>
 
         <div id="welcome-screen">
-            <h1>الامتحان التقويمي الشامل (النمط الوزاري)</h1>
-            <p class="sub-title">اللغة العربية - الصف العاشر (خلط عشوائي للأسئلة والخيارات عند كل تحديث)</p>
+            <h1>اختبار الوحدة الشامل (30 سؤال ضع دائرة)</h1>
+            <p class="sub-title">اللغة العربية - الصف العاشر (جذور متصلة وضبط وإعراب دقيق)</p>
 
             <div class="input-group">
                 <label for="student-name">الرجاء إدخال اسم الطالبة الثلاثي:</label>
@@ -486,18 +417,7 @@
             </div>
 
             <form id="quiz-form">
-                <!-- القسم الأول: الأسئلة الموضوعية (ضع دائرة) -->
-                <div class="section-title">القسم الأول: الأسئلة الموضوعية (20 سؤالاً - لكل سؤال علامة واحدة)</div>
                 <div id="mcq-container"></div>
-
-                <!-- القسم الثاني: النص والأسئلة الإنشائية -->
-                <div class="section-title">القسم الثاني: النص والأسئلة الإنشائية والإعراب (10 أسئلة - لكل سؤال علامة واحدة)</div>
-                <div class="passage-box">
-                    <b>اقرئي النص الآتي بتمعّن، ثم أجيبـي عن الأسئلة الإنشائية التي تليه:</b><br><br> «قَالَ سَيِّدُنا يُوسُفُ عليهِ السَّلامُ لإخْوَتِهِ بَعْدَ أنِ اعْتَرَفُوا بِخَطَئِهِمْ: ﴿قَالَ لَا تَثْرِيبَ عَلَيْكُمُ الْيَوْمَ يَغْفِرُ اللَّهُ لَكُمْ
-                    وَهُوَ أَرْحَمُ الرَّاحِمِينَ﴾. إنَّ <u style="text-decoration-color: var(--neon-pink); text-underline-offset: 4px;">أدب</u> الاعْتِذَارِ وخُلُقَ الصَّفْحِ عِنْدَ المَقْدِرَةِ يَعْكِسَانِ نَبَالَةَ النَّفْسِ وزَكاءَ الرُّوحِ، ومَنْ
-                    <u style="text-decoration-color: var(--neon-cyan); text-underline-offset: 4px;">يَغْفِرْ</u> <u style="text-decoration-color: var(--neon-pink); text-underline-offset: 4px;">زلة</u> أخيهِ <u style="text-decoration-color: var(--neon-cyan); text-underline-offset: 4px;">يَنَلْ</u>                    مَحَبَّةَ اللهِ والنَّاسِ. وما المَرْءُ إلا بأخْلاقِهِ المَحْمُودَةِ، وإنَّ التَّسامُحَ لَيَهْدِي إلى التَّماسُكِ والمَوَدَّةِ بينَ أَبْناءِ المُجْتَمَعِ الواحِدِ.»
-                </div>
-                <div id="written-container"></div>
 
                 <div style="text-align: center; margin-top: 35px;">
                     <button type="button" class="btn-neon" onclick="submitExam()">تسليم الورقة الأمتحانية 📤</button>
@@ -516,7 +436,7 @@
     <div class="modal" id="teacher-modal">
         <div class="modal-content">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                <h3 style="color: var(--neon-cyan);">لوحة المعلم - سجل تفاصيل النمط الوزاري</h3>
+                <h3 style="color: var(--neon-cyan);">لوحة المعلم - سجل نتائج الاختبار الشامل</h3>
                 <button class="close-modal" onclick="closeTeacherDashboard()">إغلاق ✖</button>
             </div>
 
@@ -525,16 +445,14 @@
                     <tr>
                         <th>#</th>
                         <th>اسم الطالبة</th>
-                        <th>العلامة الكلية (من 30)</th>
-                        <th>علامة الدوائر (من 20)</th>
-                        <th>علامة الإنشائي (من 10)</th>
-                        <th>الإجابات الإنشائية التفصيلية</th>
+                        <th>العلامة النهائية (من 30)</th>
+                        <th>النسبة المئوية</th>
                         <th>التاريخ والوقت</th>
                     </tr>
                 </thead>
                 <tbody id="results-body">
                     <tr>
-                        <td colspan="7">جاري التحميل...</td>
+                        <td colspan="5">جاري التحميل...</td>
                     </tr>
                 </tbody>
             </table>
@@ -547,239 +465,198 @@
     </div>
 
     <script>
-        // مصفوفة الأسئلة الأصلية (الإجابة الصحيحة معرفة بالخاصية correct)
-        const rawMcqQuestions = [{
-            id: 'm1',
-            prompt: "معنى كلمة (تثريب) في قوله تعالى: ﴿لا تَثْرِيبَ عَلَيْكُمُ الْيَوْمَ﴾ هو:",
-            correct: "لوم وعتب وتوبيخ",
-            distractors: ["عقاب وشدة", "طرد وإبعاد"]
+        // مصفوفة الأسئلة المعدلة بدقة: الجذور متصلة، أسئلة الإعراب مشكولة بالكامل، وأسئلة الضبط جردت من التشكيل
+        const rawQuestions = [{
+            id: 'q1',
+            text: "معنى كلمة (مرجاة) في سورة الأعراف قوله تعالى: ﴿قَالُوا أَرْجِهْ وَأَخَاهُ وَأَرْسِلْ فِي الْمَدَائِنِ حَاشِرِينَ﴾ هو:",
+            options: ["أجّله وأخّره", "عجّله وقرّبه", "اقتله فوراً", "استشره في أمرك"],
+            correctText: "أجّله وأخّره"
         }, {
-            id: 'm2',
-            prompt: "المعنى السياقي لكلمة (أسَفاً) في قوله تعالى: ﴿غَضْبَانَ أَسِفًا﴾ هو:",
-            correct: "شديد الحزن والغضب",
-            distractors: ["المبتسم المفكر", "الخائف المتردد"]
+            id: 'q2',
+            text: "الجذر اللغوي لكلمة (مرجاة) هو:",
+            options: ["رجي", "رجو", "مرج", "جور"],
+            correctText: "رجو"
         }, {
-            id: 'm3',
-            prompt: "دلالة قول إخوة يوسف: ﴿لَقَدْ آثَرَكَ اللَّهُ عَلَيْنَا﴾ هي:",
-            correct: "الإقرار والاعتراف بالفضل والخطأ",
-            distractors: ["المفاخرة والمطالبة بالمال", "التكذيب والاستكبار"]
+            id: 'q3',
+            text: "المقصود بالتركيب القرآني ﴿سُقِطَ فِي أَيْدِيهِمْ﴾ هو:",
+            options: ["اشتد ندمهم وعلموا أنهم قد ضلوا", "ظفروا بالغنيمة والجاه", "استسلموا للقوة العسكرية", "فقدوا أعصابهم من الفرح"],
+            correctText: "اشتد ندمهم وعلموا أنهم قد ضلوا"
         }, {
-            id: 'm4',
-            prompt: "الجذر اللغوي المجرد لكلمة (تَفَنِّدُونِ) هو:",
-            correct: "فند",
-            distractors: ["فنن", "تفن"]
+            id: 'q4',
+            text: "تجلّى اعتذار إخوة يوسف عليه السلام عند اعترافهم بالخطأ في قولهم:",
+            options: ["﴿تَاللَّهِ لَقَدْ آثَرَكَ اللَّهُ عَلَيْنَا وَإِنْ كُنَّا لَخَاطِئِينَ﴾", "﴿يَا أَبَانَا اسْتَغْفِرْ لَنَا ذُنُوبَنَا إِنَّا كُنَّا خَاطِئِينَ﴾", "﴿قَالُواْ تَاللهِ لَقَدْ عَلَمتُم مَّا جِئْنَا لِنُفْسِدَ فِي الأَرْضِ﴾", "الخياران (أ) و (ب) معاً"],
+            correctText: "الخياران (أ) و (ب) معاً"
         }, {
-            id: 'm5',
-            prompt: "الجذر اللغوي المجرد لكلمة (آثَرَكَ) هو:",
-            correct: "أثر",
-            distractors: ["ثري", "وثر"]
+            id: 'q5',
+            text: "قوله تعالى على لسان يوسف عليه السلام مسقطاً اللوم والعتاب: ﴿لَا تَثْرِيبَ عَلَيْكُمُ الْيَوْمَ﴾ يعني:",
+            options: ["لا عقوبة ولا حبس لكم", "لا لوم ولا توبيخ ولا تعيير عليكم اليوم", "لا رجعة إلى دياركم", "لا قبول لاعتذاركم"],
+            correctText: "لا لوم ولا توبيخ ولا تعيير عليكم اليوم"
         }, {
-            id: 'm6',
-            prompt: "المعنى الصرفي والسياقي لـ (بِضَاعَةٍ مُزْجَاةٍ) هو:",
-            correct: "قليلة ودنيئة ورديئة",
-            distractors: ["كثيرة وثمينة", "جديدة وفاخرة"]
+            id: 'q6',
+            text: "سبب اعتذار سيدنا موسى عليه السلام للعبد الصالح في المرة الأولى هو نسيانه، وعبر عنه بقوله:",
+            options: ["﴿لَا تُؤَاخِذْنِي بِمَا نَسِيتُ وَلَا تُرْهِقْنِي مِنْ أَمْرِي عُسْرًا﴾", "﴿إِنْ سَأَلْتُكَ عَنْ شَيْءٍ بَعْدَهَا فَلَا تُصَاحِبْنِي﴾", "﴿لَوْ شِئْتَ لَاتَّخَذْتَ عَلَيْهِ أَجْرًا﴾", "الخياران (أ) و (ب) معاً"],
+            correctText: "﴿لَا تُؤَاخِذْنِي بِمَا نَسِيتُ وَلَا تُرْهِقْنِي مِنْ أَمْرِي عُسْرًا﴾"
         }, {
-            id: 'm7',
-            prompt: "الأداة المعربة الوحيدة من أدوات الشرط الجازمة هي:",
-            correct: "أيّ",
-            distractors: ["إنْ", "مَنْ"]
+            id: 'q7',
+            text: "دلالة فعل موسى عليه السلام مع هارون عليه السلام في قوله: ﴿وَأَلْقَى الْأَلْوَاحَ وَأَخَذَ بِرَأْسِ أَخِيهِ يَجُرُّهُ إِلَيْهِ﴾ هي:",
+            options: ["الغضب الشديد والغيرة على دين الله", "الرغبة في إهانة أخيه علناً", "عدم السيطرة على الأعصاب بسبب مرض مفاجئ", "المزاح والشد الخفيف"],
+            correctText: "الغضب الشديد والغيرة على دين الله"
         }, {
-            id: 'm8',
-            prompt: "علامة جزم الفعل المضارع الصحيح الآخر في أسلوب الشرط هي:",
-            correct: "السكون الظاهر",
-            distractors: ["حذف حرف العلة", "حذف النون"]
+            id: 'q8',
+            text: "معنى كلمة (تفندون) في قوله تعالى ﴿لَوْلَا أَنْ تُفَنِّدُونِ﴾ هو:",
+            options: ["تكذبون أقوالي وتجهلون أمري", "تنسبونني إلى السفه وتستخفون برأيي لكبر سني", "تبعدونني عن مجلسكم", "تتهموني بالخيانة"],
+            correctText: "تنسبونني إلى السفه وتستخفون برأيي لكبر سني"
         }, {
-            id: 'm9',
-            prompt: "علامة جزم الفعل المضارع معتل الآخر في أسلوب الشرط هي:",
-            correct: "حذف حرف العلة",
-            distractors: ["السكون", "ثبوت النون"]
+            id: 'q9',
+            text: "كم عدد المرات التي اعتذر فيها موسى عليه السلام للعبد الصالح في رحلتهما القرآنية؟",
+            options: ["مرة واحدة", "مرتان اثنتان", "ثلاث مرات", "أربع مرات"],
+            correctText: "مرتان اثنتان"
         }, {
-            id: 'm10',
-            prompt: "علامة جزم الأفعال الخمسة في أسلوب الشرط هي:",
-            correct: "حذف النون",
-            distractors: ["ثبوت النون", "الفتحة"]
+            id: 'q10',
+            text: "البلاغة في الاستفهام بـ ﴿أَعَجِلْتُمْ أَمْرَ رَبِّكُمْ﴾ تفيد:",
+            options: ["التعجب والإنكار والتوبيخ", "الاستخبار البحت عن الوقت", "التمني والتحسر", "المدح والثناء"],
+            correctText: "التعجب والإنكار والتوبيخ"
         }, {
-            id: 'm11',
-            prompt: "إحدى الأدوات الآتية تُعدّ أداة شرط غير جازمة:",
-            correct: "لو",
-            distractors: ["مَنْ", "ما"]
+            id: 'q11',
+            text: "معنى كلمة (نكرا) في قوله تعالى عن خرق السفينة: ﴿لَقَدْ جِئْتَ شَيْئًا نُكْرًا﴾ هو:",
+            options: ["أمراً منكراً فظيعاً وعظيماً وخارجاً عن المألوف", "خطأً صغيراً يمكن غفرانه", "عملاً مستحباً ونافعاً", "فعلاً مضحكاً عجيباً"],
+            correctText: "أمراً منكراً فظيعاً وعظيماً وخارجاً عن المألوف"
         }, {
-            id: 'm12',
-            title: "إحدى الأدوات الآتية تُعدّ أداة شرط جازمة:",
-            correct: "مَتَى",
-            distractors: ["إذا", "كلما"]
+            id: 'q12',
+            text: "خلاصة العبرة الأخلاقية من قوله تعالى على لسان العبد الصالح لموسى: ﴿هَذَا فِرَاقُ بَيْنِي وَبَيْنِكَ﴾ هي:",
+            options: ["أهمية الالتزام بالشروط والاعتذار عند الإخلال بها وتحديد نهاية للعلاقة عند نفاذ العذر", "التكبر على المعلم", "استحالة التعلم للبشر", "وجوب السفر الدائم"],
+            correctText: "أهمية الالتزام بالشروط والاعتذار عند الإخلال بها وتحديد نهاية للعلاقة عند نفاذ العذر"
         }, {
-            id: 'm13',
-            prompt: "الجملة التي احتوت على أسلوب شرط جازم صحيح هي:",
-            correct: "مَنْ يتقِ الله يجعلْ له مخرجاً",
-            distractors: ["مَنْ يتقي الله يجعلُ له مخرجاً", "مَنْ يتقي الله يجعلْ له مخرجاً"]
+            id: 'q13',
+            text: "التكوين الصحيح لأركان أسلوب الشرط في اللغة العربية هو:",
+            options: ["أداة الشرط + فعل الشرط + جواب الشرط", "فعل الشرط + أداة الشرط + جواب الشرط", "جواب الشرط + فعل الشرط + أداة الشرط", "أداة الشرط + جواب الشرط + فعل الشرط"],
+            correctText: "أداة الشرط + فعل الشرط + جواب الشرط"
         }, {
-            id: 'm14',
-            prompt: "الجملة التي تُمثّل أسلوباً خبرياً مما يأتي هي:",
-            correct: "يقع البحر الميت في الأردن",
-            distractors: ["يا طالب العلمِ اجتهد", "هل زرت مدينة البترا؟"]
+            id: 'q14',
+            text: "واحدة من الأدوات الآتية تُعدّ (حرف شرط جازم) لا اسم شرط:",
+            options: ["مَنْ", "مَهْمَا", "إنْ", "حيثما"],
+            correctText: "إنْ"
         }, {
-            id: 'm15',
-            prompt: "الجملة التي تُمثّل أسلوباً إنشائياً مما يأتي هي:",
-            correct: "حافظوا على نظافة مدرستكم",
-            distractors: ["الماء عصب الحياة", "الشمس مشرقة اليوم"]
+            id: 'q15',
+            text: "إعراب الفعل (يَأْمَنِ) في قول الشاعر: 'وَمَنْ يَأْمَنِ الدُّنْيَا يَكُنْ مِثْلَ قَابِضٍ':",
+            options: ["فعل مضارع مجزوم وعلامة جزمه السكون وحُرّك بالكسر لمنع التقاء الساكنين", "فعل مضارع مجزوم وعلامة جزمه حذف حرف العلة", "فعل مضارع مرفوع بالضمة الظاهرة وحُرّك للضرورة الشعرية", "فعل مضارع مجرور وعلامة جره الكسرة الظاهرة"],
+            correctText: "فعل مضارع مجزوم وعلامة جزمه السكون وحُرّك بالكسر لمنع التقاء الساكنين"
         }, {
-            id: 'm16',
-            prompt: "الأسلوب الخبري في البلاغة العربية هو ما يحتمل:",
-            correct: "الصدق أو الكذب لذاته",
-            distractors: ["الطلب والتمني فقط", "الأمر والنهي والنداء"]
+            id: 'q16',
+            text: "نوع أداة الشرط وإعراب فعل الشرط في جملة: 'مَنْ يَصْدُقْ يُحْبَبْ':",
+            options: ["اسم شرط جازم، وفعل الشرط مضارع مجزوم بالسكون", "حرف شرط غير جازم، وفعل الشرط مرفوع بالضمة", "اسم شرط غير جازم، وفعل الشرط مبني على الفتح", "حرف شرط جازم، وفعل الشرط مجزوم بحذف النون"],
+            correctText: "اسم شرط جازم، وفعل الشرط مضارع مجزوم بالسكون"
         }, {
-            id: 'm17',
-            prompt: "الرسالة الشخصية الإلكترونية تُعدّ من المهارات الوظيفية الموجهة لـ:",
-            correct: "الأقارب والأصدقاء والزملاء",
-            distractors: ["الوزارات والهيئات الرسمية", "المحاكم والشركات التجارية"]
+            id: 'q17',
+            text: "علامة جزم الفعل المضارع (يَبْتَغِ) المعتل الآخر في جملة: 'مَنْ يَبْتَغِ غَيْرَ الإِسْلَامِ دِينًا فَلَنْ يُقْبَلَ مِنْهُ':",
+            options: ["السكون الظاهر على الكسرة", "حذف حرف العلة (الياء)", "حذف النون", "الفتحة المقدرة"],
+            correctText: "حذف حرف العلة (الياء)"
         }, {
-            id: 'm18',
-            prompt: "من أهم العناصر الفنية لكتابة رسالة الاعتذار الناجحة:",
-            correct: "بيان الخطأ والندم وطلب الصفح",
-            distractors: ["التفاخر وتبرير الإساءة", "تجاهل التوقيت المناسب"]
+            id: 'q18',
+            text: "علامة جزم الفعل (تَعْمَلُوا) في جملة: 'إنْ تَعْمَلُوا بِإِخْلَاصٍ تَنْجَحُوا':",
+            options: ["السكون", "حذف حرف العلة", "حذف النون لأنه من الأفعال الخمسة", "ثبوت النون"],
+            correctText: "حذف النون لأنه من الأفعال الخمسة"
         }, {
-            id: 'm19',
-            prompt: "الميزة الأساسية للرسائل الإلكترونية مقارنة بالورقية:",
-            correct: "السرعة وإمكانية إرفاق الملفات",
-            distractors: ["البطء والتكلفة المرتفعة", "صعوبة الأرشفة والتخزين"]
+            id: 'q19',
+            text: "إعراب الفعل (تُؤْتَ) في قولنا: 'مَتَى تَسْعَ فِي الخَيْرِ تُؤْتَ أُجُورًا':",
+            options: ["جواب الشرط مجزوم وعلامة جزمه حذف حرف العلة من آخره", "فعل مضارع مرفوع وعلامة رفعه الضمة المقدرة", "فعل مضارع مجزوم بالسكون وحذف حرف العلة للتخفيف", "فعل ماض مبني على الفتح المقدر"],
+            correctText: "جواب الشرط مجزوم وعلامة جزمه حذف حرف العلة من آخره"
         }, {
-            id: 'm20',
-            prompt: "دلالة إلقاء سيدنا موسى للألواح وأخذه برأس أخيه يجره إليه:",
-            correct: "شدة الغضب والغيرة على شريعة الله",
-            distractors: ["الرغبة في إيذاء أخيه", "التعب الشديد من السفر"]
+            id: 'q20',
+            text: "جميع الأدوات الآتية تُعدّ (أدوات شرط غير جازمة)، ما عدا واحدة منها فهي جازمة:",
+            options: ["إذا", "لَوْ", "كُلَّمَا", "أَيْنَمَا"],
+            correctText: "أَيْنَمَا"
+        }, {
+            id: 'q21',
+            text: "الجملة التي صاغت أسلوب الشرط وأفعاله بصورة نحوية دقيقة وصحيحة تماماً هي:",
+            options: ["مَهْمَا يَعْلُو المَوْجُ تَجْرِي السَّفِينَةُ", "مَهْمَا يَعْلُ المَوْجُ تَجْرِ السَّفِينَةُ", "مَهْمَا يَعْلُ المَوْجُ تَجْرِي السَّفِينَةُ", "مَهْمَا يَعْلُو المَوْجُ تَجْرِ السَّفِينَةُ"],
+            correctText: "مَهْمَا يَعْلُ المَوْجُ تَجْرِ السَّفِينَةُ"
+        }, {
+            id: 'q22',
+            text: "السبب النحوي والبلاغي للخطأ في عبارة: 'كُلَّمَا كَبِرْتَ أكثر كُلَّمَا زَادَتْ خِبْرَتُكَ':",
+            options: ["استخدام كلما الجازمة بدل إن", "تكرار أداة الشرط غير الجازمة (كلما) في جواب الشرط والصواب عدم تكرارها", "جزم الفعل الماضي بعدها", "عدم صحة المعنى دلالياً"],
+            correctText: "تكرار أداة الشرط غير الجازمة (كلما) في جواب الشرط والصواب عدم تكرارها"
+        }, {
+            id: 'q23',
+            text: "واحدة من الآتية تُعَدّ من الخصائص الرئيسية لأسلوب الشرط وجملته:",
+            options: ["ترابط جملتين بحيث لا تتحقق الثانية إلا بتحقق الأولى", "الاستقلال التام بين الجملتين نحوياً ومعنوياً", "الدلالة الدائمة على الزمن الماضي فقط", "خلوه التام من الأدوات"],
+            correctText: "ترابط جملتين بحيث لا تتحقق الثانية إلا بتحقق الأولى"
+        }, {
+            id: 'q24',
+            text: "إعراب كلمة (خَاطِئِينَ) في قوله تعالى: ﴿إِنَّا كُنَّا خَاطِئِينَ﴾ هو:",
+            options: ["خبر كان منصوب وعلامة نصبه الياء لأنه جمع مذكر سالم", "مفعول به منصوب وعلامة نصبه الياء", "حال منصوب وعلامة نصبه الياء", "فاعل مرفوع وعلامة رفعه الواو"],
+            correctText: "خبر كان منصوب وعلامة نصبه الياء لأنه جمع مذكر سالم"
+        }, {
+            id: 'q25',
+            text: "الفرق الإعرابي والدلالي بين (إنْ) الحرف و(مَنْ) الاسم في أسلوب الشرط هو:",
+            options: ["(إنْ) حرف شرط لا محل له من الإعراب، و(مَنْ) اسم شرط مبني له موقع إعرابي", "كلاهما حرفان جازمان متطابقان", "(إنْ) اسم و(مَنْ) حرف", "لا فرق إطلاقاً بينهما في الإعراب"],
+            correctText: "(إنْ) حرف شرط لا محل له من الإعراب، و(مَنْ) اسم شرط مبني له موقع إعرابي"
+        }, {
+            id: 'q26',
+            text: "الميزان الصرفي لكلمة (تفندون) هو:",
+            options: ["تُفَعِّلُونَنِ", "تُفَعِّلُونِ", "تَفْعَلُونَ", "تَنفَعِلُونَ"],
+            correctText: "تُفَعِّلُونِ"
+        }, {
+            id: 'q27',
+            text: "الجملة التي تحتوي على أداة شرط جازمة تفيد الزمان هي:",
+            options: ["أَيَّانَ تَقُمْ أَقُمْ مَعَكَ", "حَيْثُمَا تَسْتَقِمْ يُقَدِّرْ لَكَ اللهُ نجاحاً", "كَيْفَمَا تَجْلِسْ أُجْلِسْ", "مَنْ يَزْرَعْ يَحْصُدْ"],
+            correctText: "أَيَّانَ تَقُمْ أَقُمْ مَعَكَ"
+        }, {
+            id: 'q28',
+            text: "التقدير النحوي لجملة جواب الشرط الجازم إذا اقترنت بالفاء هو:",
+            options: ["تكون الجملة في محل جزم جواب الشرط", "تكون الجملة في محل نصب حال", "تكون الجملة لا محل لها من الإعراب", "تكون الجملة في محل رفع خبر"],
+            correctText: "تكون الجملة في محل جزم جواب الشرط"
+        }, {
+            id: 'q29',
+            text: "دلالة استخدام الفعل الماضي مع أداة الشرط غير الجازمة (لَوْ) في النصوص هي:",
+            options: ["امتداد التحقق والثبوت أو امتناع الشيء لامتناع غيره", "الدلالة على الاستقبال المطلق", "الشك المستمر في الحدوث", "الأمر المباشر"],
+            correctText: "امتداد التحقق والثبوت أو امتناع الشيء لامتناع غيره"
+        }, {
+            id: 'q30',
+            text: "الوجه النحوي الأصح للفعل المضارع المعتل الآخر الواقع جواباً للشرط الجازم هو:",
+            options: ["يُجزم بحذف حرف العلة من آخره وجوباً", "يُرفع بالضمة المقدرة منعاً للثقل", "يُنصب بالفتحة الظاهرة دائماً", "يُبنى على السكون المقدر"],
+            correctText: "يُجزم بحذف حرف العلة من آخره وجوباً"
         }];
 
-        // دالة العثرة العشوائية (Shuffle)
-        function shuffleArray(array) {
-            let cur = array.length,
-                rand;
-            while (cur !== 0) {
-                rand = Math.floor(Math.random() * cur);
-                cur--;
-                [array[cur], array[rand]] = [array[rand], array[cur]];
+        // دالة الخلط العشوائي للمصفوفات (Fisher-Yates Shuffle)
+        function shuffle(array) {
+            let currentIndex = array.length,
+                randomIndex;
+            let arrCopy = JSON.parse(JSON.stringify(array));
+            while (currentIndex !== 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [arrCopy[currentIndex], arrCopy[randomIndex]] = [arrCopy[randomIndex], arrCopy[currentIndex]];
             }
-            return array;
+            return arrCopy;
         }
 
-        let renderedMcqQuestions = [];
-
-        const writtenQuestions = [{
-            id: 'w1',
-            title: "س1 (استخراج واستكشاف): استخرجي من النص أسلوب شرط جازم وحددي أركانه:",
-            fields: [{
-                label: "أداة الشرط وفعل الشرط (الفراغ الأول):",
-                keyWords: ["من يغفر", "من", "يغفر"]
-            }, {
-                label: "جواب الشرط (الفراغ الثاني):",
-                keyWords: ["ينل"]
-            }]
-        }, {
-            id: 'w2',
-            title: "س2 (إعراب مفصل): أعربي الفعلين المضبوطين بالسكون واللذين تحتهما خط أزرق في النص (يَغْفِرْ) و (يَنَلْ):",
-            fields: [{
-                label: "إعراب الفعل (يَغْفِرْ):",
-                keyWords: ["مضارع", "مجزوم", "فعل الشرط", "السكون"]
-            }, {
-                label: "إعراب الفعل (يَنَلْ):",
-                keyWords: ["مضارع", "مجزوم", "جواب الشرط", "السكون"]
-            }]
-        }, {
-            id: 'w3',
-            title: "س3 (معاجم ودلالة): استخرجي من النص كلمتين بالدلالة الآتية:",
-            fields: [{
-                label: "كلمة بمعنى (الذنب أو الخطأ):",
-                keyWords: ["زلة"]
-            }, {
-                label: "كلمة بمعنى (الطهارة والنقاء):",
-                keyWords: ["زكاء"]
-            }]
-        }, {
-            id: 'w4',
-            title: "س4 (بلاغة وبناء لغوي): استخرجي من النص مثالاً لكل من الأساليب الآتية:",
-            fields: [{
-                label: "أسلوب خبري:",
-                keyWords: ["أدب", "التسامح", "المرء", "يغفر"]
-            }, {
-                label: "أسلوب إنشائي طلبي:",
-                keyWords: ["تثريب", "يغفر الله"]
-            }]
-        }, {
-            id: 'w5',
-            title: "س5 (تحليل وفهم): وضيحي كيف يسهم التسامح والصفح في تماسك المجتمع بناءً على النص:",
-            fields: [{
-                label: "الإجابة التحليلية النموذجية:",
-                keyWords: ["المودة", "التماسك", "المحبة", "أبناء"]
-            }]
-        }, {
-            id: 'w6',
-            title: "س6 (جذر لغوي): هاتي الجذر اللغوي المجرد لكل كلمة في الفراغ الخاص بها:",
-            fields: [{
-                label: "الجذر المجرد لـ (اعترفوا):",
-                keyWords: ["عرف"]
-            }, {
-                label: "الجذر المجرد لـ (التسامح):",
-                keyWords: ["سمح"]
-            }]
-        }, {
-            id: 'w7',
-            title: "س7 (تركيب وقواعد): صوغي جملة مفيدة توظفين فيها أسلوب شرط جازم بالأداة (إن):",
-            fields: [{
-                label: "جملة أسلوب الشرط الجازمة بـ (إن):",
-                keyWords: ["إن", "تدرس", "تتق", "تخلص"]
-            }]
-        }, {
-            id: 'w8',
-            title: "س8 (شرح ودلالة): بيني المعنى السياقي لتركيب: ﴿لا تثريب عليكم﴾:",
-            fields: [{
-                label: "المعنى والدلالة النموذجية:",
-                keyWords: ["عفو", "صفح", "لوم", "عتب"]
-            }]
-        }, {
-            id: 'w9',
-            title: "س9 (مهارات كتابية): اذكر عنصرين فنيين أساسيين لكتابة رسالة اعتذار ناجحة:",
-            fields: [{
-                label: "العنصر الفني الأول:",
-                keyWords: ["التوقيت", "الخطأ", "اعتراف"]
-            }, {
-                label: "العنصر الفني الثاني:",
-                keyWords: ["الندم", "الصفح", "لغة"]
-            }]
-        }, {
-            id: 'w10',
-            title: "س10 (ضبط لغوي): اذكري الحركة الإعرابية المناسبة للحرف الأخير للكلمتين اللتين تحتهما خط وردي وخاليتين من التشكيل في النص (أدب) و (زلة):",
-            fields: [{
-                label: "ضبط الحركة الأخيرة لكلمة (أدب):",
-                keyWords: ["الضمة", "ضمة", "ضم"]
-            }, {
-                label: "ضبط الحركة الأخيرة لكلمة (زلة):",
-                keyWords: ["الفتحة", "فتحة", "فتح"]
-            }]
-        }];
+        let processedQuestions = [];
 
         function renderExam() {
-            // 1. خلط الأسئلة
-            let shuffledQ = shuffleArray([...rawMcqQuestions]);
-            renderedMcqQuestions = [];
+            // 1. خلط ترتيب الأسئلة بالكامل عند كل تحميل/تحديث
+            let shuffledQList = shuffle(rawQuestions);
+            processedQuestions = [];
 
             let mcqHTML = "";
-            shuffledQ.forEach((q, idx) => {
-                        // 2. دمج الخيارات وخلطها عشوائياً
-                        let allOpts = [q.correct, ...q.distractors];
-                        shuffleArray(allOpts);
 
-                        renderedMcqQuestions.push({
+            shuffledQList.forEach((q, idx) => {
+                        // 2. خلط خيارات كل سؤال مع حجز الفهرس الصحيح بدقة
+                        let shuffledOptions = shuffle(q.options);
+                        let correctIdx = shuffledOptions.indexOf(q.correctText);
+
+                        processedQuestions.push({
                             id: q.id,
-                            correctText: q.correct
+                            correctIndex: correctIdx
                         });
 
                         mcqHTML += `
                     <div class="q-box" id="card-${q.id}">
-                        <div class="q-title">${idx + 1}. ${q.prompt || q.title}</div>
+                        <div class="q-title">${idx + 1}. ${q.text}</div>
                         <div class="options-list">
-                            ${allOpts.map((opt) => `
+                            ${shuffledOptions.map((opt, oIdx) => `
                                 <label class="option-item">
-                                    <input type="radio" name="${q.id}" value="${opt.replace(/"/g, '&quot;')}">
+                                    <input type="radio" name="${q.id}" value="${oIdx}">
                                     ${opt}
                                 </label>
                             `).join('')}
@@ -787,27 +664,8 @@
                     </div>
                 `;
             });
+
             document.getElementById('mcq-container').innerHTML = mcqHTML;
-
-            let writtenHTML = "";
-            writtenQuestions.forEach((q) => {
-                let fieldsHTML = q.fields.map((f, fIdx) => `
-                    <div class="sub-field-group">
-                        <label class="sub-field-label">${f.label}</label>
-                        <input type="text" class="text-answer-input" name="${q.id}_f${fIdx}" placeholder="اكتبي الإجابة هنا..." autocomplete="off">
-                    </div>
-                `).join('');
-
-                writtenHTML += `
-                    <div class="q-box" id="card-${q.id}">
-                        <div class="q-title">${q.title}</div>
-                        <div class="fields-container">
-                            ${fieldsHTML}
-                        </div>
-                    </div>
-                `;
-            });
-            document.getElementById('written-container').innerHTML = writtenHTML;
         }
 
         let studentName = "";
@@ -833,7 +691,7 @@
 
             let unansweredCard = null;
 
-            for (let q of renderedMcqQuestions) {
+            for (let q of processedQuestions) {
                 const selected = document.querySelector(`input[name="${q.id}"]:checked`);
                 if (!selected) {
                     unansweredCard = document.getElementById(`card-${q.id}`);
@@ -847,47 +705,20 @@
                 return;
             }
 
-            let mcqScore = 0;
-            renderedMcqQuestions.forEach(q => {
+            let finalScore = 0;
+            processedQuestions.forEach(q => {
                 const selected = document.querySelector(`input[name="${q.id}"]:checked`);
-                if (selected && selected.value === q.correctText) {
-                    mcqScore += 1;
+                if (selected && parseInt(selected.value) === q.correctIndex) {
+                    finalScore += 1;
                 }
             });
 
-            let writtenScore = 0;
-            let textAnswersLog = [];
-
-            writtenQuestions.forEach(q => {
-                let questionScore = 0;
-                let subAnswers = [];
-
-                q.fields.forEach((f, fIdx) => {
-                    const inputElem = document.querySelector(`input[name="${q.id}_f${fIdx}"]`);
-                    const val = inputElem ? inputElem.value.trim() : "";
-                    subAnswers.push(`${f.label} (${val || 'لم يُجب'})`);
-
-                    if (val !== "") {
-                        let matched = f.keyWords.filter(kw => val.toLowerCase().includes(kw.toLowerCase()));
-                        if (matched.length > 0) {
-                            questionScore += (1.0 / q.fields.length);
-                        }
-                    }
-                });
-
-                writtenScore += questionScore;
-                textAnswersLog.push(`[${q.title}] → ${subAnswers.join(' | ')}`);
-            });
-
-            writtenScore = Math.min(Math.round(writtenScore), 10);
-            let totalFinalScore = mcqScore + writtenScore;
+            let percentage = ((finalScore / 30) * 100).toFixed(1);
 
             const record = {
                 name: studentName,
-                totalScore: totalFinalScore,
-                mcqScore: mcqScore,
-                writtenScore: writtenScore,
-                detailedAnswers: textAnswersLog.join(" <br> "),
+                totalScore: finalScore,
+                percentage: percentage + "%",
                 date: new Date().toLocaleString('ar-JO')
             };
 
@@ -914,11 +745,11 @@
 
         function loadTeacherData() {
             const tbody = document.getElementById('results-body');
-            tbody.innerHTML = `<tr><td colspan="7">جاري جلب النتائج من قاعدة البيانات...</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="5">جاري جلب النتائج من قاعدة البيانات...</td></tr>`;
 
             getResultsFromFirebase((results) => {
                 if (results.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="7">لا توجد نتائج مسجلة حتى الآن.</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="5">لا توجد نتائج مسجلة حتى الآن.</td></tr>`;
                     return;
                 }
 
@@ -927,9 +758,7 @@
                         <td>${i + 1}</td>
                         <td><b>${r.name}</b></td>
                         <td style="color: var(--neon-cyan); font-weight: bold;">${r.totalScore} / 30</td>
-                        <td><span style="color: var(--info-blue);">${r.mcqScore} / 20</span></td>
-                        <td><span style="color: var(--neon-green);">${r.writtenScore} / 10</span></td>
-                        <td><div class="answers-detail-box">${r.detailedAnswers}</div></td>
+                        <td style="color: var(--neon-green); font-weight: bold;">${r.percentage}</td>
                         <td>${r.date}</td>
                     </tr>
                 `).join('');
