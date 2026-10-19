@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>امتحان اللغة العربية - النمط الوزاري - الصف العاشر</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&family=Amiri:wght@700&display=swap" rel="stylesheet">
+    <style>
+         :root {
+            --bg-color: #0a0a12;
+            --card-bg: #121220;
+            --neon-cyan: #00f3ff;
+            --neon-pink: #ff007f;
+            --neon-purple: #9d00ff;
+            --neon-green: #39ff14;
+            --text-color: #ffffff;
+            --text-dim: #a0a0c0;
+            --error-red: #ff3366;
+            --info-blue: #00bfff;
+            --gold: #ffd700;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Tajawal', sans-serif;
+        }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image: radial-gradient(circle at 15% 15%, rgba(0, 243, 255, 0.08) 0%, transparent 40%), radial-gradient(circle at 85% 85%, rgba(255, 0, 127, 0.08) 0%, transparent 40%);
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 950px;
+            background: var(--card-bg);
+            border: 2px solid var(--neon-purple);
+            box-shadow: 0 0 25px rgba(157, 0, 255, 0.3), inset 0 0 15px rgba(157, 0, 255, 0.1);
+            border-radius: 20px;
+            padding: 35px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .teacher-btn {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: transparent;
+            border: 1px solid var(--neon-cyan);
+            color: var(--neon-cyan);
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 0 8px rgba(0, 243, 255, 0.3);
+            z-index: 10;
+        }
+        
+        .teacher-btn:hover {
+            background: var(--neon-cyan);
+            color: #000;
+            box-shadow: 0 0 15px var(--neon-cyan);
+        }
+        
+        #welcome-screen {
+            text-align: center;
+            padding: 40px 10px;
+        }
+        
+        h1 {
+            color: var(--neon-cyan);
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px var(--neon-cyan);
+        }
+        
+        .sub-title {
+            color: var(--text-dim);
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+        
+        .input-group {
+            margin-bottom: 25px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--neon-pink);
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .input-group input {
+            width: 80%;
+            max-width: 350px;
+            padding: 12px 20px;
+            background: #1a1a2e;
+            border: 2px solid var(--neon-purple);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 1.1rem;
+            outline: none;
+            text-align: center;
+            transition: 0.3s;
+        }
+        
+        .input-group input:focus {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 15px var(--neon-cyan);
+        }
+        
+        .btn-neon {
+            background: linear-gradient(45deg, var(--neon-purple), var(--neon-pink));
+            border: none;
+            color: #fff;
+            padding: 12px 40px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 0 15px rgba(255, 0, 127, 0.4);
+        }
+        
+        .btn-neon:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px var(--neon-pink);
+        }
+        
+        #exam-screen {
+            display: none;
+        }
+        
+        .exam-header {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .student-info-tag {
+            color: var(--neon-cyan);
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+        
+        .exam-info-tag {
+            background: rgba(255, 0, 127, 0.2);
+            color: var(--neon-pink);
+            padding: 5px 12px;
+            border-radius: 15px;
+            border: 1px solid var(--neon-pink);
+            font-size: 0.9rem;
+        }
+        
+        .section-title {
+            color: var(--neon-cyan);
+            border-right: 4px solid var(--neon-cyan);
+            padding-right: 10px;
+            margin: 30px 0 15px 0;
+            font-size: 1.3rem;
+            text-shadow: 0 0 5px var(--neon-cyan);
+        }
+        
+        .passage-box {
+            background: #11111d;
+            border: 1px solid var(--neon-cyan);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+            line-height: 2.2;
+            font-family: 'Amiri', serif;
+            font-size: 1.3rem;
+            color: #f0f0f0;
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.15);
+        }
+        
+        .q-box {
+            background: #18182a;
+            border: 1px solid #2a2a48;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: 0.3s;
+        }
+        
+        .q-box.error-unanswered {
+            border: 2px solid var(--error-red) !important;
+            box-shadow: 0 0 15px var(--error-red) !important;
+            animation: pulse-red 1.5s infinite;
+        }
+        
+        @keyframes pulse-red {
+            0% {
+                box-shadow: 0 0 5px var(--error-red);
+            }
+            50% {
+                box-shadow: 0 0 20px var(--error-red);
+            }
+            100% {
+                box-shadow: 0 0 5px var(--error-red);
+            }
+        }
+        
+        .q-title {
+            font-size: 1.05rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #fff;
+            line-height: 1.6;
+        }
+        
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        
+        .option-item {
+            display: flex;
+            align-items: center;
+            background: #202038;
+            padding: 12px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+            border: 1px solid transparent;
+            font-size: 1.05rem;
+        }
+        
+        .option-item:hover {
+            background: #2a2a4a;
+            border-color: var(--neon-purple);
+        }
+        
+        .option-item input[type="radio"] {
+            margin-left: 12px;
+            accent-color: var(--neon-pink);
+            width: 18px;
+            height: 18px;
+        }
+        
+        .fields-container {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        
+        .sub-field-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        
+        .sub-field-label {
+            color: var(--neon-cyan);
+            font-size: 0.95rem;
+            font-weight: bold;
+        }
+        
+        .text-answer-input {
+            width: 100%;
+            padding: 10px 15px;
+            background: #11111d;
+            border: 1px dashed #555577;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 0.98rem;
+            outline: none;
+            transition: 0.3s;
+        }
+        
+        .text-answer-input:focus {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 8px var(--neon-cyan);
+        }
+        
+        #final-screen {
+            display: none;
+            text-align: center;
+            padding: 50px 20px;
+        }
+        
+        .success-icon {
+            font-size: 4rem;
+            color: var(--neon-green);
+            text-shadow: 0 0 20px var(--neon-green);
+            margin-bottom: 20px;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(5px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background: var(--card-bg);
+            border: 2px solid var(--neon-cyan);
+            border-radius: 15px;
+            padding: 25px;
+            width: 95%;
+            max-width: 950px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 0 30px var(--neon-cyan);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+        
+        th,
+        td {
+            padding: 10px;
+            border: 1px solid #333;
+            text-align: center;
+        }
+        
+        th {
+            background: var(--neon-purple);
+            color: #fff;
+        }
+        
+        td {
+            background: #18182a;
+        }
+        
+        .answers-detail-box {
+            text-align: right;
+            background: #11111d;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            max-height: 120px;
+            overflow-y: auto;
+        }
+        
+        .dashboard-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+        }
+        
+        .dash-btn {
+            background: #1a1a2e;
+            border: 1px solid var(--neon-cyan);
+            color: var(--neon-cyan);
+            padding: 8px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        
+        .dash-btn:hover {
+            background: var(--neon-cyan);
+            color: #000;
+            box-shadow: 0 0 10px var(--neon-cyan);
+        }
+        
+        .dash-btn.danger {
+            border-color: var(--error-red);
+            color: var(--error-red);
+        }
+        
+        .dash-btn.danger:hover {
+            background: var(--error-red);
+            color: #fff;
+            box-shadow: 0 0 10px var(--error-red);
+        }
+        
+        .close-modal {
+            background: var(--neon-pink);
+            color: #fff;
+            border: none;
+            padding: 6px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+
+    <!-- ربط Firebase Realtime Database -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDlAF2SrTjnDkSzIoXV2NYqpBvaiFBAoUc",
+            authDomain: "sdgedrfgbdrf.firebaseapp.com",
+            databaseURL: "https://sdgedrfgbdrf-default-rtdb.firebaseio.com",
+            projectId: "sdgedrfgbdrf",
+            storageBucket: "sdgedrfgbdrf.firebasestorage.app",
+            messagingSenderId: "104456673240",
+            appId: "1:104456673240:web:b60d12e0102849975884ad",
+            measurementId: "G-S6L34KMQCL"
+        };
+
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const database = firebase.database();
+
+        function saveToFirebase(record) {
+            database.ref('arabic_final_exam_results').push(record)
+                .catch(err => console.error("خطأ أثناء الحفظ:", err));
+        }
+
+        function getResultsFromFirebase(callback) {
+            database.ref('arabic_final_exam_results').once('value')
+                .then(snapshot => {
+                    const data = snapshot.val();
+                    let list = [];
+                    if (data) {
+                        list = Object.keys(data).map(key => ({
+                            id: key,
+                            ...data[key]
+                        }));
+                    }
+                    callback(list);
+                })
+                .catch(err => {
+                    console.error("خطأ في الجلب:", err);
+                    callback([]);
+                });
+        }
+
+        function clearFirebaseData(callback) {
+            database.ref('arabic_final_exam_results').remove()
+                .then(() => callback(true))
+                .catch(err => callback(false));
+        }
+    </script>
+</head>
+
+<body>
+
+    <div class="container">
+        <button id="teacher-main-btn" class="teacher-btn" onclick="openTeacherDashboard()">لوحة المعلم 🔒</button>
+
+        <div id="welcome-screen">
+            <h1>الامتحان التقويمي الشامل (النمط الوزاري)</h1>
+            <p class="sub-title">اللغة العربية - الصف العاشر (نظام التصحيح الفردي الدقيق لكل فرع)</p>
+
+            <div class="input-group">
+                <label for="student-name">الرجاء إدخال اسم الطالبة الثلاثي:</label>
+                <input type="text" id="student-name" placeholder="اكتبي اسمك هنا..." autocomplete="off">
+            </div>
+
+            <button class="btn-neon" onclick="startExam()">بدء الامتحان 🚀</button>
+        </div>
+
+        <div id="exam-screen">
+            <div class="exam-header">
+                <div class="student-info-tag">الطالبة: <span id="display-name"></span></div>
+                <div class="exam-info-tag">العلامة الكلية: 30 درجة</div>
+            </div>
+
+            <form id="quiz-form">
+                <!-- القسم الأول: الأسئلة الموضوعية (ضع دائرة) -->
+                <div class="section-title">القسم الأول: الأسئلة الموضوعية (20 سؤالاً - لكل سؤال علامة واحدة)</div>
+                <div id="mcq-container"></div>
+
+                <!-- القسم الثاني: النص المشكول مع حجب الحركات عن كلمات الضبط فقط -->
+                <div class="section-title">القسم الثاني: النص والأسئلة الإنشائية والإعراب (10 أسئلة - لكل سؤال علامة واحدة)</div>
+                <div class="passage-box">
+                    <b>اقرئي النص الآتي بتمعّن، ثم أجيبـي عن الأسئلة الإنشائية التي تليه:</b><br><br> «قَالَ سَيِّدُنا يُوسُفُ عليهِ السَّلامُ لإخْوَتِهِ بَعْدَ أنِ اعْتَرَفُوا بِخَطَئِهِمْ: ﴿قَالَ لَا تَثْرِيبَ عَلَيْكُمُ الْيَوْمَ يَغْفِرُ اللَّهُ لَكُمْ
+                    وَهُوَ أَرْحَمُ الرَّاحِمِينَ﴾. إنَّ <u style="text-decoration-color: var(--neon-pink); text-underline-offset: 4px;">أدب</u> الاعْتِذَارِ وخُلُقَ الصَّفْحِ عِنْدَ المَقْدِرَةِ يَعْكِسَانِ نَبَالَةَ النَّفْسِ وزَكاءَ الرُّوحِ، ومَنْ
+                    <u style="text-decoration-color: var(--neon-cyan); text-underline-offset: 4px;">يَغْفِرْ</u> <u style="text-decoration-color: var(--neon-pink); text-underline-offset: 4px;">زلة</u> أخيهِ <u style="text-decoration-color: var(--neon-cyan); text-underline-offset: 4px;">يَنَلْ</u>                    مَحَبَّةَ اللهِ والنَّاسِ. وما المَرْءُ إلا بأخْلاقِهِ المَحْمُودَةِ، وإنَّ التَّسامُحَ لَيَهْدِي إلى التَّماسُكِ والمَوَدَّةِ بينَ أَبْناءِ المُجْتَمَعِ الواحِدِ.»
+                </div>
+                <div id="written-container"></div>
+
+                <div style="text-align: center; margin-top: 35px;">
+                    <button type="button" class="btn-neon" onclick="submitExam()">تسليم الورقة الأمتحانية 📤</button>
+                </div>
+            </form>
+        </div>
+
+        <div id="final-screen">
+            <div class="success-icon">✓</div>
+            <h2 style="color: var(--neon-green); text-shadow: 0 0 10px var(--neon-green); margin-bottom: 15px;">تم إرسال إجاباتك بنجاح!</h2>
+            <p style="color: var(--text-dim); font-size: 1.15rem; line-height: 1.8;">شكراً لكِ. تم حفظ ورقة إجابتك في السجل الخاص بالمعلم بنجاح.</p>
+        </div>
+    </div>
+
+    <!-- لوحة المعلم Modal -->
+    <div class="modal" id="teacher-modal">
+        <div class="modal-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h3 style="color: var(--neon-cyan);">لوحة المعلم - سجل تفاصيل النمط الوزاري</h3>
+                <button class="close-modal" onclick="closeTeacherDashboard()">إغلاق ✖</button>
+            </div>
+
+            <table id="results-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>اسم الطالبة</th>
+                        <th>العلامة الكلية (من 30)</th>
+                        <th>علامة الدوائر (من 20)</th>
+                        <th>علامة الإنشائي (من 10)</th>
+                        <th>الإجابات الإنشائية التفصيلية</th>
+                        <th>التاريخ والوقت</th>
+                    </tr>
+                </thead>
+                <tbody id="results-body">
+                    <tr>
+                        <td colspan="7">جاري التحميل...</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="dashboard-actions">
+                <button class="dash-btn" onclick="loadTeacherData()">🔄 تحديث البيانات</button>
+                <button class="dash-btn danger" onclick="deleteAllData()">🗑️ حذف جميع السجلات</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const mcqQuestions = [{
+            id: 'm1',
+            title: "1. معنى كلمة (تثريب) في قوله تعالى: ﴿لا تَثْرِيبَ عَلَيْكُمُ الْيَوْمَ﴾ هو:",
+            options: ["لوم وعتب وتوبيخ", "عقاب وشدة", "طرد وإبعاد"]
+        }, {
+            id: 'm2',
+            title: "2. المعنى السياقي لكلمة (أسَفاً) في قوله تعالى: ﴿غَضْبَانَ أَسِفًا﴾ هو:",
+            options: ["شديد الحزن والغضب", "المبتسم المفكر", "الخائف المتردد"]
+        }, {
+            id: 'm3',
+            title: "3. دلالة قول إخوة يوسف: ﴿لَقَدْ آثَرَكَ اللَّهُ عَلَيْنَا﴾ هي:",
+            options: ["الإقرار والاعتراف بالفضل والخطأ", "المفاخرة والمطالبة بالمال", "التكذيب والاستكبار"]
+        }, {
+            id: 'm4',
+            title: "4. الجذر اللغوي المجرد لكلمة (تَفَنِّدُونِ) هو:",
+            options: ["فند", "فنن", "تفن"]
+        }, {
+            id: 'm5',
+            title: "5. الجذر اللغوي المجرد لكلمة (آثَرَكَ) هو:",
+            options: ["أثر", "ثري", "وثر"]
+        }, {
+            id: 'm6',
+            title: "6. المعنى الصرفي والسياقي لـ (بِضَاعَةٍ مُزْجَاةٍ) هو:",
+            options: ["قليلة ودنيئة ورديئة", "كثيرة وثمينة", "جديدة وفاخرة"]
+        }, {
+            id: 'm7',
+            title: "7. الأداة المعربة الوحيدة من أدوات الشرط الجازمة هي:",
+            options: ["أيّ", "إنْ", "مَنْ"]
+        }, {
+            id: 'm8',
+            title: "8. علامة جزم الفعل المضارع الصحيح الآخر في أسلوب الشرط هي:",
+            options: ["السكون الظاهر", "حذف حرف العلة", "حذف النون"]
+        }, {
+            id: 'm9',
+            title: "9. علامة جزم الفعل المضارع معتل الآخر في أسلوب الشرط هي:",
+            options: ["حذف حرف العلة", "السكون", "ثبوت النون"]
+        }, {
+            id: 'm10',
+            title: "10. علامة جزم الأفعال الخمسة في أسلوب الشرط هي:",
+            options: ["حذف النون", "ثبوت النون", "الفتحة"]
+        }, {
+            id: 'm11',
+            title: "11. إحدى الأدوات الآتية تُعدّ أداة شرط غير جازمة:",
+            options: ["لو", "مَنْ", "ما"]
+        }, {
+            id: 'm12',
+            title: "12. إحدى الأدوات الآتية تُعدّ أداة شرط جازمة:",
+            options: ["مَتَى", "إذا", "كلما"]
+        }, {
+            id: 'm13',
+            title: "13. الجملة التي احتوت على أسلوب شرط جازم صحيح هي:",
+            options: ["مَنْ يتقِ الله يجعلْ له مخرجاً", "مَنْ يتقي الله يجعلُ له مخرجاً", "مَنْ يتقي الله يجعلْ له مخرجاً"]
+        }, {
+            id: 'm14',
+            title: "14. الجملة التي تُمثّل أسلوباً خبرياً مما يأتي هي:",
+            options: ["يقع البحر الميت في الأردن", "يا طالب العلمِ اجتهد", "هل زرت مدينة البترا؟"]
+        }, {
+            id: 'm15',
+            title: "15. الجملة التي تُمثّل أسلوباً إنشائياً مما يأتي هي:",
+            options: ["حافظوا على نظافة مدرستكم", "الماء عصب الحياة", "الشمس مشرقة اليوم"]
+        }, {
+            id: 'm16',
+            title: "16. الأسلوب الخبري في البلاغة العربية هو ما يحتمل:",
+            options: ["الصدق أو الكذب لذاته", "الطلب والتمني فقط", "الأمر والنهي والنداء"]
+        }, {
+            id: 'm17',
+            title: "17. الرسالة الشخصية الإلكترونية تُعدّ من المهارات الوظيفية الموجهة لـ:",
+            options: ["الأقارب والأصدقاء والزملاء", "الوزارات والهيئات الرسمية", "المحاكم والشركات التجارية"]
+        }, {
+            id: 'm18',
+            title: "18. من أهم العناصر الفنية لكتابة رسالة الاعتذار الناجحة:",
+            options: ["بيان الخطأ والندم وطلب الصفح", "التفاخر وتبرير الإساءة", "تجاهل التوقيت المناسب"]
+        }, {
+            id: 'm19',
+            title: "19. الميزة الأساسية للرسائل الإلكترونية مقارنة بالورقية:",
+            options: ["السرعة وإمكانية إرفاق الملفات", "البطء والتكلفة المرتفعة", "صعوبة الأرشفة والتخزين"]
+        }, {
+            id: 'm20',
+            title: "20. دلالة إلقاء سيدنا موسى للألواح وأخذه برأس أخيه يجره إليه:",
+            options: ["شدة الغضب والغيرة على شريعة الله", "الرغبة في إيذاء أخيه", "التعب الشديد من السفر"]
+        }];
+
+        // الأسئلة الإنشائية (تقييم كل فرع في حقل منفصل تماماً وبطريقة عادلة صريحة)
+        const writtenQuestions = [{
+            id: 'w1',
+            title: "س1 (استخراج واستكشاف): استخرجي من النص أسلوب شرط جازم وحددي أركانه:",
+            fields: [{
+                label: "أداة الشرط وفعل الشرط (الفراغ الأول):",
+                keyWords: ["من يغفر", "من", "يغفر"]
+            }, {
+                label: "جواب الشرط (الفراغ الثاني):",
+                keyWords: ["ينل"]
+            }]
+        }, {
+            id: 'w2',
+            title: "س2 (إعراب مفصل): أعربي الفعلين المضبوطين بالسكون واللذين تحتهما خط أزرق في النص (يَغْفِرْ) و (يَنَلْ):",
+            fields: [{
+                label: "إعراب الفعل (يَغْفِرْ):",
+                keyWords: ["مضارع", "مجزوم", "فعل الشرط", "السكون"]
+            }, {
+                label: "إعراب الفعل (يَنَلْ):",
+                keyWords: ["مضارع", "مجزوم", "جواب الشرط", "السكون"]
+            }]
+        }, {
+            id: 'w3',
+            title: "س3 (معاجم ودلالة): استخرجي من النص كلمتين بالدلالة الآتية:",
+            fields: [{
+                label: "كلمة بمعنى (الذنب أو الخطأ):",
+                keyWords: ["زلة"]
+            }, {
+                label: "كلمة بمعنى (الطهارة والنقاء):",
+                keyWords: ["زكاء"]
+            }]
+        }, {
+            id: 'w4',
+            title: "س4 (بلاغة وبناء لغوي): استخرجي من النص مثالاً لكل من الأساليب الآتية:",
+            fields: [{
+                label: "أسلوب خبري:",
+                keyWords: ["أدب", "التسامح", "المرء", "يغفر"]
+            }, {
+                label: "أسلوب إنشائي طلبي:",
+                keyWords: ["تثريب", "يغفر الله"]
+            }]
+        }, {
+            id: 'w5',
+            title: "س5 (تحليل وفهم): وضيحي كيف يسهم التسامح والصفح في تماسك المجتمع بناءً على النص:",
+            fields: [{
+                label: "الإجابة التحليلية النموذجية:",
+                keyWords: ["المودة", "التماسك", "المحبة", "أبناء"]
+            }]
+        }, {
+            id: 'w6',
+            title: "س6 (جذر لغوي): هاتي الجذر اللغوي المجرد لكل كلمة في الفراغ الخاص بها:",
+            fields: [{
+                label: "الجذر المجرد لـ (اعترفوا):",
+                keyWords: ["عرف"]
+            }, {
+                label: "الجذر المجرد لـ (التسامح):",
+                keyWords: ["سمح"]
+            }]
+        }, {
+            id: 'w7',
+            title: "س7 (تركيب وقواعد): صوغي جملة مفيدة توظفين فيها أسلوب شرط جازم بالأداة (إن):",
+            fields: [{
+                label: "جملة أسلوب الشرط الجازمة بـ (إن):",
+                keyWords: ["إن", "تدرس", "تتق", "تخلص"]
+            }]
+        }, {
+            id: 'w8',
+            title: "س8 (شرح ودلالة): بيني المعنى السياقي لتركيب: ﴿لا تثريب عليكم﴾:",
+            fields: [{
+                label: "المعنى والدلالة النموذجية:",
+                keyWords: ["عفو", "صفح", "لوم", "عتب"]
+            }]
+        }, {
+            id: 'w9',
+            title: "س9 (مهارات كتابية): اذكر عنصرين فنيين أساسيين لكتابة رسالة اعتذار ناجحة:",
+            fields: [{
+                label: "العنصر الفني الأول:",
+                keyWords: ["التوقيت", "الخطأ", "اعتراف"]
+            }, {
+                label: "العنصر الفني الثاني:",
+                keyWords: ["الندم", "الصفح", "لغة"]
+            }]
+        }, {
+            id: 'w10',
+            title: "س10 (ضبط لغوي): اذكري الحركة الإعرابية المناسبة للحرف الأخير للكلمتين اللتين تحتهما خط وردي وخاليتين من التشكيل في النص (أدب) و (زلة):",
+            fields: [{
+                label: "ضبط الحركة الأخيرة لكلمة (أدب):",
+                keyWords: ["الضمة", "ضمة", "ضم"]
+            }, {
+                label: "ضبط الحركة الأخيرة لكلمة (زلة):",
+                keyWords: ["الفتحة", "فتحة", "فتح"]
+            }]
+        }];
+
+        function renderExam() {
+            let mcqHTML = "";
+            mcqQuestions.forEach((q) => {
+                        mcqHTML += `
+                    <div class="q-box" id="card-${q.id}">
+                        <div class="q-title">${q.title}</div>
+                        <div class="options-list">
+                            ${q.options.map((opt, oIdx) => `
+                                <label class="option-item">
+                                    <input type="radio" name="${q.id}" value="${oIdx}">
+                                    ${opt}
+                                </label>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+            document.getElementById('mcq-container').innerHTML = mcqHTML;
+
+            let writtenHTML = "";
+            writtenQuestions.forEach((q) => {
+                let fieldsHTML = q.fields.map((f, fIdx) => `
+                    <div class="sub-field-group">
+                        <label class="sub-field-label">${f.label}</label>
+                        <input type="text" class="text-answer-input" name="${q.id}_f${fIdx}" placeholder="اكتبي الإجابة هنا..." autocomplete="off">
+                    </div>
+                `).join('');
+
+                writtenHTML += `
+                    <div class="q-box" id="card-${q.id}">
+                        <div class="q-title">${q.title}</div>
+                        <div class="fields-container">
+                            ${fieldsHTML}
+                        </div>
+                    </div>
+                `;
+            });
+            document.getElementById('written-container').innerHTML = writtenHTML;
+        }
+
+        let studentName = "";
+
+        function startExam() {
+            const nameInput = document.getElementById('student-name');
+            if (nameInput.value.trim() === "") {
+                nameInput.style.borderColor = "var(--error-red)";
+                nameInput.focus();
+                return;
+            }
+            studentName = nameInput.value.trim();
+            document.getElementById('display-name').innerText = studentName;
+            
+            document.getElementById('teacher-main-btn').style.display = 'none';
+            document.getElementById('welcome-screen').style.display = 'none';
+            document.getElementById('exam-screen').style.display = 'block';
+            window.scrollTo(0, 0);
+        }
+
+        function submitExam() {
+            document.querySelectorAll('.q-box').forEach(card => card.classList.remove('error-unanswered'));
+
+            let unansweredCard = null;
+
+            for (let q of mcqQuestions) {
+                const selected = document.querySelector(`input[name="${q.id}"]:checked`);
+                if (!selected) {
+                    unansweredCard = document.getElementById(`card-${q.id}`);
+                    break;
+                }
+            }
+
+            if (unansweredCard) {
+                unansweredCard.classList.add('error-unanswered');
+                unansweredCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return;
+            }
+
+            let mcqScore = 0;
+            mcqQuestions.forEach(q => {
+                const selected = document.querySelector(`input[name="${q.id}"]:checked`);
+                if (selected && parseInt(selected.value) === 0) {
+                    mcqScore += 1;
+                }
+            });
+
+            let writtenScore = 0;
+            let textAnswersLog = [];
+
+            writtenQuestions.forEach(q => {
+                let questionScore = 0;
+                let subAnswers = [];
+
+                q.fields.forEach((f, fIdx) => {
+                    const inputElem = document.querySelector(`input[name="${q.id}_f${fIdx}"]`);
+                    const val = inputElem ? inputElem.value.trim() : "";
+                    subAnswers.push(`${f.label} (${val || 'لم يُجب'})`);
+
+                    if (val !== "") {
+                        let matched = f.keyWords.filter(kw => val.toLowerCase().includes(kw.toLowerCase()));
+                        
+                        // احتساب عادل ودقيق لكل فرع بشكل منفصل تماماً
+                        if (matched.length > 0) {
+                            questionScore += (1.0 / q.fields.length);
+                        }
+                    }
+                });
+
+                writtenScore += questionScore;
+                textAnswersLog.push(`[${q.title}] → ${subAnswers.join(' | ')}`);
+            });
+
+            writtenScore = Math.min(Math.round(writtenScore), 10);
+            let totalFinalScore = mcqScore + writtenScore;
+
+            const record = {
+                name: studentName,
+                totalScore: totalFinalScore,
+                mcqScore: mcqScore,
+                writtenScore: writtenScore,
+                detailedAnswers: textAnswersLog.join(" <br> "),
+                date: new Date().toLocaleString('ar-JO')
+            };
+
+            saveToFirebase(record);
+
+            document.getElementById('exam-screen').style.display = 'none';
+            document.getElementById('final-screen').style.display = 'block';
+            window.scrollTo(0, 0);
+        }
+
+        function openTeacherDashboard() {
+            const pass = prompt("الرجاء إدخال رمز دخول لوحة المعلم:");
+            if (pass === "8000") {
+                document.getElementById('teacher-modal').style.display = 'flex';
+                loadTeacherData();
+            } else if (pass !== null) {
+                alert("رمز الدخول غير صحيح!");
+            }
+        }
+
+        function closeTeacherDashboard() {
+            document.getElementById('teacher-modal').style.display = 'none';
+        }
+
+        function loadTeacherData() {
+            const tbody = document.getElementById('results-body');
+            tbody.innerHTML = `<tr><td colspan="7">جاري جلب النتائج من قاعدة البيانات...</td></tr>`;
+
+            getResultsFromFirebase((results) => {
+                if (results.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="7">لا توجد نتائج مسجلة حتى الآن.</td></tr>`;
+                    return;
+                }
+
+                tbody.innerHTML = results.map((r, i) => `
+                    <tr>
+                        <td>${i + 1}</td>
+                        <td><b>${r.name}</b></td>
+                        <td style="color: var(--neon-cyan); font-weight: bold;">${r.totalScore} / 30</td>
+                        <td><span style="color: var(--info-blue);">${r.mcqScore} / 20</span></td>
+                        <td><span style="color: var(--neon-green);">${r.writtenScore} / 10</span></td>
+                        <td><div class="answers-detail-box">${r.detailedAnswers}</div></td>
+                        <td>${r.date}</td>
+                    </tr>
+                `).join('');
+            });
+        }
+
+        function deleteAllData() {
+            if (confirm("هل أنت متأكد من رغبتك في حذف جميع سجلات الطالبات نهائياً؟")) {
+                clearFirebaseData((success) => {
+                    if (success) {
+                        loadTeacherData();
+                    } else {
+                        alert("حدث خطأ أثناء الحذف.");
+                    }
+                });
+            }
+        }
+
+        window.onload = renderExam;
+    </script>
+</body>
+
+</html>
